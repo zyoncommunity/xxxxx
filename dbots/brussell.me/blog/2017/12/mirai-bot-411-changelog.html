@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+<!-- Mirrored from brussell.me/blog/2017/12/mirai-bot-411-changelog.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 28 Nov 2018 19:15:44 GMT -->
+<head>
+		<meta charset="UTF-8">
+		<title>Brussell - Mirai Bot 4.11 Changelog</title>
+		<meta name="description" content="Everything that&#39;s changed in the newest update to Mirai">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="theme-color" content="#2a2f38">
+
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="mirai-bot-411-changelog.html">
+		<meta property="og:title" content="Mirai Bot 4.11 Changelog">
+		<meta property="og:description" content="Everything that&#39;s changed in the newest update to Mirai">
+		<meta property="og:image" content="../../../static/images/avatar.png">
+		<meta property="og:locale" content="en-US">
+
+		<link rel="icon" type="image/jpg" href="../../../static/images/avatar.png">
+		<link href="../../../static/css/styles.css" rel="stylesheet">
+		<link href="../../../static/css/blog-post.css" rel="stylesheet">
+		<link rel="stylesheet" href="../../../static/css/atom-one-dark.css">
+		<link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,700|Rubik" rel="stylesheet">
+		<link rel="stylesheet" href="../../../../cdn.jsdelivr.net/gh/tonsky/FiraCode%401.206/distr/fira_code.css">
+
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-72190085-4"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() { dataLayer.push(arguments); }
+			gtag('js', new Date());
+
+			gtag('config', 'UA-72190085-4');
+		</script>
+	</head>
+	<body>
+		<div class="meta">
+			<h1 class="title">Mirai Bot 4.11 Changelog</h1>
+			<p class="date">Sat, 16 Dec 2017 06:00:00 UTC</p>
+			<p class="tags">mirai, discord, changelog</p>
+		</div>
+
+		<div class="ad">
+			<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1129127991310590" data-ad-slot="2994016622" data-ad-format="auto"></ins>
+			<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+		</div>
+
+		<h1 id=highlights>Highlights</h1>
+<h2 id=music>Music</h2>
+<p>I've held off on adding music to Mirai for a long time, it's not an easy (or cheap) task, but it's finally time. Mirai now supports playing music from many sources. I've got big plans for this, and they'll take a while to fully implement, so for now I'm just releasing a beta of the module. More features will be added once they are completed and pass initial testing.</p>
+<p>Because handling music uses a lot of resources, there is a limit on the maximum number of music players. As more servers are added, the capacity will be increased. You can bypass this by upgrading a server to <a href="https://www.patreon.com/brussell98">Mirai Bot Pro</a>. Pro guilds are guaranteed access to a music player, and gain access to the volume command, unlimited queue, and more.</p>
+<p>Remember to report any issues you experience so we can resolve them as soon as possible. For further reading check out <a href="../10/upgrading-mirais-music-module.html">Upgrading Mirai's Music Module</a>.</p>
+<h2 id=maps>Maps</h2>
+<p>Mirai's new <code>m.map</code> command allows you to check Google Maps for any location on Earth. You can select from four different map types: road, satellite, terrain, and hybrid.</p>
+<p><strong>m.map santa monica pier -z 17</strong><br>
+<img src="../../../../i.imgur.com/Ez9JTRj.png" alt="A map" height="400"></p>
+<p><strong>m.map 富士山 -z 13 -t sat</strong><br>
+<img src="../../../../i.imgur.com/9rFFQce.png" alt="Another map" height="400"></p>
+<h2 id=added-an-or-option-to-mprune>Added an OR option to m.prune</h2>
+<p>Prune is <em>by far</em> the most used command, so it's essential that it works well. An issue I discovered after the re-write from 4.10 it that, while we provide many filters, you often have to split them up into separate prunes. There was no way to say &quot;Delete messages that match this <em>or</em> this.&quot; Because of this I have added that option.</p>
+<p>To specify multiple sets of filters use a <code>|</code>. Here's an example that deletes long messages with links <em>or</em> invites: <code>m.prune 200 --length 200 -li | -le 200 -i</code></p>
+<h2 id=anime-airing-notification-sync-for-pro-users>Anime airing notification sync for Pro users</h2>
+<p>Pro users can have Mirai automatically sync their MyAnimeList for airing notifications. Now, instead of manually subscribing to each anime they're watching, Mirai will do it for them.</p>
+<h2 id=catgirls-nekosbrussellme-integration>Catgirls (nekos.brussell.me) integration</h2>
+<p>With the official release of <a href="https://nekos.brussell.me/">Catgirls</a> nearing, Mirai now has expanded support for the site. Instead of just getting random images, you can now search by tags. You can also sort results by likes, recent, and oldest.</p>
+<h2 id=easier-reminders>Easier reminders</h2>
+<p>I've found that many users get confused by the reminder creation syntax, so I've re-written it to be much easier to use. You can either be guided by prompts or enter it the old way. When you're done it will confirm the reminder so you don't have to figure out how to delete mistakes.</p>
+<h1 id=full-changelog>Full Changelog</h1>
+<h2 id=mirai-bot>Mirai Bot</h2>
+<ul>
+<li>Replace Listen module with Music module
+<ul>
+<li>Added <code>m.play</code></li>
+<li>Added <code>m.stop</code></li>
+<li>Added <code>m.queue</code></li>
+<li>Added <code>m.volume</code></li>
+<li>Added <code>m.nowplaying</code></li>
+<li>Added <code>m.pause</code></li>
+<li>Added <code>m.resume</code></li>
+<li>Added <code>m.skip</code></li>
+<li>Added <code>m.bind</code></li>
+</ul></li>
+<li>Re-wrote Patreon module to support Pro</li>
+<li>Added <code>m.pro</code></li>
+<li>Improved usability of m.reminder
+<ul>
+<li>Prompt system</li>
+<li>Timezone support</li>
+</ul></li>
+<li>Added <code>m.osu recent</code></li>
+<li>Optimized MOTD</li>
+<li>Re-wrote Twitch notifications for optimization
+<ul>
+<li>Added TwitchRequestHandler</li>
+<li>Updated format of notification messages</li>
+</ul></li>
+<li>Added <code>m.map</code> to get Google Maps images</li>
+<li>Added <code>rand</code> and <code>rng</code> prefixes to <code>m.random</code></li>
+<li>Improve wording in <code>m.random</code> response</li>
+<li>Fixed errors with removed roles in <code>m.role</code></li>
+<li>Fixed wind direction pointer in <code>m.weather</code></li>
+<li>Fixed &quot;Hide weather location&quot; hiding non-default locations without <code>--hidden</code> in <code>m.weather</code></li>
+<li>Added automatic sync for airing anime notifications for Pro users</li>
+<li>Added basic Games module for Mirai's statuses
+<ul>
+<li>Update statuses list</li>
+</ul></li>
+<li>Added OR operator (<code>|</code>) to <code>m.prune</code></li>
+<li>Added search and sort support to <code>m.catgirl</code></li>
+<li>Added support for new status types to <code>m.info</code></li>
+<li>Added Discord server invite link to <code>m.help</code></li>
+<li>Added &quot;responsible moderator&quot; to kick and ban events</li>
+<li>Disallow setting Discord managed roles as Mirai managed roles</li>
+<li>Added bot permission check to <code>m.prune</code></li>
+<li>Removed &quot;Global NSFW&quot; setting</li>
+<li>Fixed average users per guild calculation and added Grafana link in live stats message</li>
+</ul>
+<h2 id=mirai-web>Mirai Web</h2>
+<ul>
+<li>Added translation support</li>
+<li>Fixed command search querystring</li>
+<li>Added &quot;New!&quot; and &quot;Updated&quot; tags to commands</li>
+<li>Updated description meta tag</li>
+<li>Added Discord invite to home page</li>
+<li>Fixed bug with server settings page forgetting checkbox selections</li>
+<li>Fixed pie chart size</li>
+<li>Added MAL username option for Pro users</li>
+<li>Changed Listen.moe stats to Music stats</li>
+<li>Added FAQ page</li>
+<li>Added Pro page</li>
+<li>Fixed error on server settings page when no event settings were previously modified</li>
+</ul>
+<h1 id=coming-soon>Coming Soon</h1>
+<h2 id=weather-command-update>Weather command update</h2>
+<p>The response image for <code>m.weather</code> has gotten pretty old, so I've been working on replacing it with a modern one. This new response image will also include a short forecast. You can see a WIP preview below.</p>
+<p data-height="480" data-theme-id="24000" data-slug-hash="QOzdjK" data-default-tab="result" data-user="brussell98" data-embed-version="2" data-pen-title="Weather Card" class="codepen">See the Pen <a href="https://codepen.io/brussell98/pen/QOzdjK/">Weather Card</a> by Brandon Russell (<a href="https://codepen.io/brussell98">@brussell98</a>) on <a href="https://codepen.io/">CodePen</a>.</p>
+<script async src="../../../../production-assets.codepen.io/assets/embed/ei.js"></script>
+<h2 id=more-music-features>More music features</h2>
+<p>The current release of the music module is very basic, but we have big plans for it. Here's some of the planned features:</p>
+<ul>
+<li>Queue viewable on website</li>
+<li>Mirai Bot Radio allowing saved playlists and online radios</li>
+<li>Advanced queueing, such as queue at position, queue part of playlist, and remove part of queue</li>
+<li>Queue looping and shuffling</li>
+<li>Permission systems</li>
+</ul>
+<h2 id=starboard>Starboard</h2>
+<p>Mirai will be able to run a starboard, posting starred messages in a configured channel.</p>
+<h2 id=airing-schedule-command>Airing schedule command</h2>
+<p>Allows you to get a schedule of when anime you get notifications for air during the week.</p>
+<h2 id=improved-web-dashboard>Improved web dashboard</h2>
+<p>In the future we plan to allow you to view and edit things such as reminders, followed twitch channels, airing anime notification settings, and more on the dashboard.</p>
+<h2 id=lottery-update>Lottery update</h2>
+<p>We plan to rename <code>m.lottery</code> to <code>m.giveaway</code> and add more features to it, such as restricting it to certain users and requiring a certain account age.</p>
+
+
+		<div class="ad">
+			<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+			<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1129127991310590" data-ad-slot="2994016622" data-ad-format="auto"></ins>
+			<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+		</div>
+	</body>
+
+<!-- Mirrored from brussell.me/blog/2017/12/mirai-bot-411-changelog.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 28 Nov 2018 19:15:47 GMT -->
+</html>

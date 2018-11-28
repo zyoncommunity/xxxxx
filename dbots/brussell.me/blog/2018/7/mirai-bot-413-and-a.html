@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+<!-- Mirrored from brussell.me/blog/2018/7/mirai-bot-413-and-a.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 28 Nov 2018 19:15:10 GMT -->
+<head>
+		<meta charset="UTF-8">
+		<title>Brussell - Mirai Bot 4.13 and a New Website</title>
+		<meta name="description" content="Mirai Bot 4.13 includes tons of fixes and improvements, but most importantly it includes support for the new website. I&#39;ve spent a lot of time rewriting the website from scratch to build a better version. See what&#39;s changed in this release.">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="theme-color" content="#2a2f38">
+
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="mirai-bot-413-and-a.html">
+		<meta property="og:title" content="Mirai Bot 4.13 and a New Website">
+		<meta property="og:description" content="Mirai Bot 4.13 includes tons of fixes and improvements, but most importantly it includes support for the new website. I&#39;ve spent a lot of time rewriting the website from scratch to build a better version. See what&#39;s changed in this release.">
+		<meta property="og:image" content="../../../static/images/avatar.png">
+		<meta property="og:locale" content="en-US">
+
+		<link rel="icon" type="image/jpg" href="../../../static/images/avatar.png">
+		<link href="../../../static/css/styles.css" rel="stylesheet">
+		<link href="../../../static/css/blog-post.css" rel="stylesheet">
+		<link rel="stylesheet" href="../../../static/css/atom-one-dark.css">
+		<link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,700|Rubik" rel="stylesheet">
+		<link rel="stylesheet" href="../../../../cdn.jsdelivr.net/gh/tonsky/FiraCode%401.206/distr/fira_code.css">
+
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-72190085-4"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() { dataLayer.push(arguments); }
+			gtag('js', new Date());
+
+			gtag('config', 'UA-72190085-4');
+		</script>
+	</head>
+	<body>
+		<div class="meta">
+			<h1 class="title">Mirai Bot 4.13 and a New Website</h1>
+			<p class="date">Fri, 13 Jul 2018 05:00:00 UTC</p>
+			<p class="tags">mirai, discord, changelog, website</p>
+		</div>
+
+		<div class="ad">
+			<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1129127991310590" data-ad-slot="2994016622" data-ad-format="auto"></ins>
+			<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+		</div>
+
+		<h1 id=highlights>Highlights</h1>
+<p>This update lacks in big shiny features because it focuses on the website, but fear not, because the next update is going to be big! This update was also delayed due to my work on <a href="../../../../bots.ondiscord.xyz/index.html">Bots on Discord</a> and <a href="https://nekos.moe/">Nekos.moe</a>, but expect 4.14 to be released sooner now that that work is done.</p>
+<h2 id=new-website>New Website</h2>
+<p>I had big plans for the Mirai Bot Dashboard, but the website was beginning to age (the JavaScript ecosystem moves fast). I decided the best way to implement the features I wanted was to completely re-write the website. The new website has a clean design and focuses on being easy to use.</p>
+<p>Most of the changes can be noticed in the dashboard. It now displays information such as votes, configured notifications, and pro details. Any user in the server can view these, and I plan to add interactions in the future. The new dashboard also has help messages inlined with the forms that explain certain options. Another feature that was often requested is the ability to enable and disable all commands at once. Outside of the dashboard there are still many changes, such as an updated FAQ and feature pages (WIP), so <a href="https://mirai.brussell.me/">head over to the new website</a> and check it out! For a quick preview watch this video:</p>
+<div style='position:relative;padding-bottom:54%'><iframe src='https://gfycat.com/ifr/FriendlyFaintIndianglassfish' frameborder='0' scrolling='no' width='100%' height='100%' style='position:absolute;top:0;left:0' allowfullscreen></iframe></div>
+<h1 id=full-changelog>Full Changelog</h1>
+<h2 id=mirai-bot>Mirai Bot</h2>
+<ul>
+<li>New command: Forceban (ban user by ID, even if they aren't on the server)</li>
+<li>API: Update for the new website</li>
+<li>API: Fix handling of deleted managed roles</li>
+<li>AniList &amp; Twitch Handlers: Fix ratelimit handling</li>
+<li>Games: Add two new statuses (on Discord, with megane)</li>
+<li>Event Notifications: Refactor and add handler for deleted channels that clears database items</li>
+<li>Weather: Fix default speed units (m/s -&gt; km/h)</li>
+<li>Urban: Restrict to NSFW channels and remove the alias &quot;define&quot;</li>
+<li>Pro: Update the info message to list all current features</li>
+<li>Currency: Change APIs to restore functionality</li>
+<li>Catgirl: Add new API features (relevance sort)</li>
+<li>Catgirl: Fix message displayed when &quot;nsfw&quot; is attempted in a SFW channel</li>
+<li>Prune: Fix for numbers with decimals</li>
+<li>Anime &amp; Manga: Fix for null titles</li>
+<li>Weather: Update base color for better readability</li>
+<li>Weather: Trim long location strings</li>
+<li>Weather: Fix filename being &quot;undefined&quot;</li>
+<li>Weather: Fix location string saying &quot;undefined&quot;</li>
+<li>Airing: Fix &quot;Duration: null&quot;</li>
+<li>Live Stats: Shorten memory usage stat to not overflow</li>
+<li>Live Stats: Add warning when shard guild count is over 2,250</li>
+<li>Music Queue: Removed extra space</li>
+<li>Ping: Fixed rounding and add <code>m.latency</code> alias</li>
+</ul>
+<h2 id=mirai-web>Mirai Web</h2>
+<ul>
+<li>New underlying technology (Nuxt, ElementUI, and other less notable things)
+<ul>
+<li>Server-side rendering by Nuxt</li>
+</ul></li>
+<li>New home page design</li>
+<li>New features pages (WIP, only anime is complete as an example)</li>
+<li>Better commands search bar with autocomplete</li>
+<li>Updated FAQ page</li>
+<li>Updated about page with supporter avatars hidden by default</li>
+<li>New dashboard
+<ul>
+<li>Easier to use overall</li>
+<li>Cleaner design</li>
+<li>Any user can see non-mod server info</li>
+<li>Update data button actually works</li>
+<li>Disable all button for commands</li>
+<li>Display of lotteries, votes, twitch notifications, airing notifications, and pro info</li>
+</ul></li>
+</ul>
+<h1 id=coming-soon>Coming Soon</h1>
+<h2 id=music-beta-part-2>Music Beta Part 2</h2>
+<p>The next update will include more of my planned features for music. Here's some potential features:</p>
+<ul>
+<li>Queue persists listening sessions and bot restarts</li>
+<li>Queue viewable on website</li>
+<li><code>mm.play</code> will become <code>mm.join/start</code>, while <code>mm.queue</code> wil get the <code>play</code> alias</li>
+<li>Improved usability of the join and bind commands</li>
+<li>Advanced queueing, such as queue at position, queue part of playlist, and remove part of queue</li>
+<li>Queue looping and shuffling</li>
+<li>Initial support for permission systems</li>
+</ul>
+<h2 id=airing-schedule-command>Airing schedule command</h2>
+<p>Allows you to get a schedule of when anime you get notifications for air during the week.</p>
+<h2 id=giveaways-and-polls>Giveaways and Polls</h2>
+<p>The vote and lottery commands have been long due for an upgrade. I have plans to overhaul them with tons of new features. Giveaways for example will be able to specify eligible roles and minimum account age. Giveaways and votes will also be able to be restricted to a role. I also plan to allow the use of reactions instead of messages for giveaways and votes.</p>
+<h2 id=dashboard-improvements>Dashboard Improvements</h2>
+<p>I plan to add more features to the dashboard. One feature is the ability to change your twitch and airing anime notification settings on the dashboard. Another is the ability to create and manage votes and giveaways. I can't say for sure what will make it into 4.14, but I'll try to fit some things in.</p>
+<h1 id=promotion>Promotion</h1>
+<p>I recently launched the open beta for my new bot list: Bots on Discord. Bots on Discord is a list that intends to be the next generation of bot lists, focusing on the users while also giving developers powerful tools. I won't bore you with more buzz words, we'd just appreciate if you took some time to check out our website <a href="../../../../bots.ondiscord.xyz/index.html">bots.ondiscord.xyz</a>.</p>
+<p>(If you do care about our story and goals check out our <a href="../../../../bots.ondiscord.xyz/about.html">about page</a>)</p>
+
+
+		<div class="ad">
+			<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+			<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1129127991310590" data-ad-slot="2994016622" data-ad-format="auto"></ins>
+			<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+		</div>
+	</body>
+
+<!-- Mirrored from brussell.me/blog/2018/7/mirai-bot-413-and-a.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 28 Nov 2018 19:15:10 GMT -->
+</html>

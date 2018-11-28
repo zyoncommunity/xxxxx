@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+<!-- Mirrored from brussell.me/blog/2018/10/mirai-bot-414---giveaways,.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 28 Nov 2018 19:15:09 GMT -->
+<head>
+		<meta charset="UTF-8">
+		<title>Brussell - Mirai Bot 4.14 - Giveaways, Music, and More</title>
+		<meta name="description" content="Mirai Bot 4.14 brings some long-needed changes to Mirai. First, there&#39;s the new giveaway system that gives you the ability to run easily configurable giveaways in your server. Along with that, the music system has been completely re-written to be more powerful than ever, bringing us much closer to the full release. Even if you don&#39;t use those features, this update still includes a ton of improvements to Mirai.">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="theme-color" content="#2a2f38">
+
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="https://brussell.me/blog/2018/10/mirai-bot-414---giveaways,.html">
+		<meta property="og:title" content="Mirai Bot 4.14 - Giveaways, Music, and More">
+		<meta property="og:description" content="Mirai Bot 4.14 brings some long-needed changes to Mirai. First, there&#39;s the new giveaway system that gives you the ability to run easily configurable giveaways in your server. Along with that, the music system has been completely re-written to be more powerful than ever, bringing us much closer to the full release. Even if you don&#39;t use those features, this update still includes a ton of improvements to Mirai.">
+		<meta property="og:image" content="../../../static/images/avatar.png">
+		<meta property="og:locale" content="en-US">
+
+		<link rel="icon" type="image/jpg" href="../../../static/images/avatar.png">
+		<link href="../../../static/css/styles.css" rel="stylesheet">
+		<link href="../../../static/css/blog-post.css" rel="stylesheet">
+		<link rel="stylesheet" href="../../../static/css/atom-one-dark.css">
+		<link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,700|Rubik" rel="stylesheet">
+		<link rel="stylesheet" href="../../../../cdn.jsdelivr.net/gh/tonsky/FiraCode%401.206/distr/fira_code.css">
+
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-72190085-4"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() { dataLayer.push(arguments); }
+			gtag('js', new Date());
+
+			gtag('config', 'UA-72190085-4');
+		</script>
+	</head>
+	<body>
+		<div class="meta">
+			<h1 class="title">Mirai Bot 4.14 - Giveaways, Music, and More</h1>
+			<p class="date">Sat, 13 Oct 2018 05:00:00 UTC</p>
+			<p class="tags">mirai, discord, changelog, website</p>
+		</div>
+
+		<div class="ad">
+			<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1129127991310590" data-ad-slot="2994016622" data-ad-format="auto"></ins>
+			<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+		</div>
+
+		<h1 id=highlights>Highlights</h1>
+<p>With this major update I'm excited to bring you the new giveaway command, an improved music system, and more! The giveaway command replaces the old lottery command and greatly improves on the old experience. The music system was re-written and contains tons of improvements and new features bringing us closer to release. Along with those there's the return of pro airing sync, some new dashboard features, and a big list of improvements to other features.</p>
+<h2 id=giveaways>Giveaways</h2>
+<p>This update includes an all-new giveaway command that I've been pretty excited for. We've had the lottery command for a long time now, but it's never been what I wanted. I wanted to give our users the ability to create whatever type of giveaway they wanted. The lottery command just wasn't designed for that, and it was kind of confusing to use. The giveaway command has a completely re-worked user experience for both the creator and the entrants.</p>
+<p>When you create a giveaway you'll be met with a new system designed to make doing complicated configuration in Discord easy. Navigate through the menu and chose the settings you want for your giveaway with visual feedback the whole way. If you want to speed-run your way through, there's also a shortcut that allows setting the main configuration options in one command. After you create your giveaway all users have to do to enter is click the reaction button. This provides easy visual confirmation that a user has entered, and lets you get an idea of how many users have entered already.</p>
+<p>This command has some noticeable differences from the lottery command. Every user can have one giveaway per channel, so multiple giveaways can be run at once in the same place. You can also restrict who can create giveaways to a certain role. When ending a giveaway, you must confirm it, preventing you from mistakenly deleting everything. Most importantly, this command lets you customize the giveaway <a href="https://mirai.brussell.me/commands?search=giveaway">with the options shown here</a>.</p>
+<h2 id=music-improved>Music Improved</h2>
+<p>As I tried to work on the music system to make it more feature-complete I began to notice a lot of flaws in its design. I ended up decided it was best to re-design it with the release features in mind. The new system is much more maintainable and has some important new features included. Most importantly, all music data is stored in Redis instead of the process's memory. This means that we can restore data from crashes and other issues, and our cache remains intact after restarts. Popular tracks will resolve more quickly, as they don't need to be fetched as often. Additionally, if your music player stops without you commanding it to, Mirai will try to restore it later, resuming from the next item in the queue.</p>
+<p>I've also made a lot of quality-of-life improvements to the music commands. One major usability issue is that people would confuse the play command with the queue command. Because of this <code>play</code> is now <code>join</code>/<code>start</code>, and <code>queue</code> has the alias <code>play</code>. The queue command also used to handle things like <code>listen.moe</code> as the list command, so I've changed it to only run sub-commands with exact matches. Thanks to the new version of Lavalink, you will also be given more informative errors in most cases.</p>
+<h2 id=pro-airing-sync-returns>Pro Airing Sync Returns</h2>
+<p>As some of you may know, MyAnimeList shut down their API early this year. Because of this Mirai was unable to fetch anime lists to auto-subscribe pro users to airing notifications. In this update Mirai uses AniList, so anyone wishing to use this feature can link their AniList account and have the same functionality as before.</p>
+<h2 id=votes-and-giveaways-on-the-dashboard>Votes and Giveaways on the Dashboard</h2>
+<p>The dashboard now allows anyone (yes, even non-mods) to easily view the status of votes and giveaways. Here's an example:</p>
+<p><img src="../../../../i.imgur.com/3i5bRvI.png" alt="Votes and Giveaways on the Dashboard"></p>
+<h1 id=full-changelog>Full Changelog</h1>
+<h2 id=mirai-bot>Mirai Bot</h2>
+<ul>
+<li>Added a prompting system for easier data input for commands</li>
+<li>Added an argument parser helper to the Command class</li>
+<li>Started work on a reaction handler for interactive messages</li>
+<li>Info: Removed &quot;Shared Servers&quot; section and made &quot;Status&quot; section bigger</li>
+<li>Added a new Giveaway command, replacing Lottery</li>
+<li>Catgirls: Fixed NSFW check</li>
+<li>Pro: Fixed some checks for Pro not working properly</li>
+<li>Added new dependencies and upgraded current ones to improve performance and stability</li>
+<li>Improve permission checks for commands</li>
+<li>Made a lot of changes to improve the codebase</li>
+<li>Currency: Updated the endpoint to make it work again</li>
+<li>Facts: Changed catfacts API since the old one stopped working</li>
+<li>Twitch: Clarified wording to make it clear that the channel would receive notifications, not you</li>
+<li>API: Send more data to non-mods</li>
+<li>API: Include detailed vote and giveaway data</li>
+<li>Added Redis support</li>
+<li>Added Bots on Discord stat posting</li>
+<li>Removed the /stats link in the live stats message, since it no-longer exists</li>
+<li>Airing: Switched Pro airing sync to use AniList</li>
+<li>Music: Re-wrote the music system
+<ul>
+<li>Added a MusicStore to store and retrieve data in Redis
+<ul>
+<li>Tracks and playlists are cached to improve wait times</li>
+</ul></li>
+<li>Added support for the Role-only Mode permission system</li>
+<li>Play: Renamed to Join with aliases <code>j</code> and <code>start</code></li>
+<li>Queue: Added alias <code>play</code></li>
+<li>Join: Added the ability to set a bound channel without typing the voice channel first</li>
+<li>Join: Made voice channel name matching case-insensitive</li>
+<li>Removed the global player limit for non-pro guilds</li>
+<li>Now Playing: Fixed the help text and updated not playing text</li>
+<li>Queue: Sub-commands now only run with exact matches (So <code>listen.moe</code> doesn't trigger <code>list</code>)</li>
+<li>Queue: Improved response messages</li>
+<li>Added better error messages everywhere and added notices that are sent to the bound channel when needed</li>
+<li>Stop: Added alias <code>leave</code></li>
+<li>Added a message advertising Pro when a non-pro player is shut down</li>
+<li>Added player restoration (When the bot restarts or a player crashes it should resume when possible or when <code>mm.join</code> is used)</li>
+<li>Increased the amount of time a non-pro player waits before leaving an empty channel</li>
+<li>Added a check to remove the bound text channel if it is deleted</li>
+<li>Upgraded to Lavalink v3</li>
+<li>Added partial support for looping and repeating</li>
+</ul></li>
+</ul>
+<h2 id=mirai-web>Mirai Web</h2>
+<ul>
+<li>Old: Fix Element UI link in the footer</li>
+<li>Old: Fixed timezone saving not working in some cases</li>
+<li>Upgraded to Nuxt 2
+<ul>
+<li>Upgraded dependencies to improve performance and stability</li>
+</ul></li>
+<li>Commands: Updated info for the 4.14.0 update</li>
+<li>Layout: Added some quick code for announcements that can be expanded on later</li>
+<li>About: Adjusted icon and text positioning for the top links</li>
+<li>Anime Features: Fixed incorrect style scoping</li>
+<li>Completed the music and Twitch feature pages</li>
+<li>Pro: Updated info</li>
+<li>Dashboard: Allowed non-mod users to see more info</li>
+<li>Dashboard: Added detailed info for giveaways and votes</li>
+<li>Dashboard: Added music settings</li>
+<li>User Settings: Updated the anime list username field to reflect the airing sync changes</li>
+<li>Added ads to some pages to see how they do</li>
+</ul>
+
+
+		<div class="ad">
+			<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+			<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1129127991310590" data-ad-slot="2994016622" data-ad-format="auto"></ins>
+			<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+		</div>
+	</body>
+
+<!-- Mirrored from brussell.me/blog/2018/10/mirai-bot-414---giveaways,.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 28 Nov 2018 19:15:10 GMT -->
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+<!-- Mirrored from brussell.me/blog/2017/12/fixing-bugs-and-errors-in.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 28 Nov 2018 19:15:16 GMT -->
+<head>
+		<meta charset="UTF-8">
+		<title>Brussell - Fixing Bugs and Errors in Mirai Bot 4.11</title>
+		<meta name="description" content="What happens when you release an update with insufficient testing.">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="theme-color" content="#2a2f38">
+
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="fixing-bugs-and-errors-in.html">
+		<meta property="og:title" content="Fixing Bugs and Errors in Mirai Bot 4.11">
+		<meta property="og:description" content="What happens when you release an update with insufficient testing.">
+		<meta property="og:image" content="../../../static/images/avatar.png">
+		<meta property="og:locale" content="en-US">
+
+		<link rel="icon" type="image/jpg" href="../../../static/images/avatar.png">
+		<link href="../../../static/css/styles.css" rel="stylesheet">
+		<link href="../../../static/css/blog-post.css" rel="stylesheet">
+		<link rel="stylesheet" href="../../../static/css/atom-one-dark.css">
+		<link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,700|Rubik" rel="stylesheet">
+		<link rel="stylesheet" href="../../../../cdn.jsdelivr.net/gh/tonsky/FiraCode%401.206/distr/fira_code.css">
+
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-72190085-4"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() { dataLayer.push(arguments); }
+			gtag('js', new Date());
+
+			gtag('config', 'UA-72190085-4');
+		</script>
+	</head>
+	<body>
+		<div class="meta">
+			<h1 class="title">Fixing Bugs and Errors in Mirai Bot 4.11</h1>
+			<p class="date">Mon, 18 Dec 2017 06:00:00 UTC</p>
+			<p class="tags">mirai, development</p>
+		</div>
+
+		<div class="ad">
+			<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1129127991310590" data-ad-slot="2994016622" data-ad-format="auto"></ins>
+			<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+		</div>
+
+		<p>Any large update to a program will be accompanied by the discovery of bugs. Here are some that were present in Mirai's 4.11 update, and how they were resolved.</p>
+<h2 id=permission-checks-failing-to-detect-missing-permissions>Permission checks failing to detect missing permissions</h2>
+<p>I'll start with a simple one. Permission checks are often present before code that sends requests to Discord. This prevents our logs from being spammed with 401 (Access Denied) errors because of users setting up permissions wrong. Let's use this as an example:</p>
+<pre><code class="hljs-js"><span class="hljs-keyword">let</span> permissions = channel.permissionsOf(<span class="hljs-keyword">this</span>.bot.user.id);
+<span class="hljs-keyword">if</span> (!permissions.has(<span class="hljs-string">'readMessageHistory'</span>) || !permissions.has(<span class="hljs-string">'sendMessages'</span>))
+    <span class="hljs-keyword">continue</span>;
+</code></pre>
+<p>This is taken from the MOTD module. It's supposed to check that we can get the past messages in a channel and then send the MOTD message if needed. Despite this, we still get Access Denied. To solve this we need to also check for the <code>readMessages</code> permission.</p>
+<p>A lesson you can learn from this is to not make assumptions. I <em>assumed</em> that not having the <code>readMessages</code> permission would mean I also wouldn't have those permissions.</p>
+<h2 id=sorting-doesnt-work-in-mcatgirl>Sorting doesn't work in m.catgirl</h2>
+<p>According to the command help, using <code>order:likes</code> should sort the results by likes, but it doesn't. Let's take a look at the line that checks for a <code>order</code> tag.</p>
+<pre><code class="hljs-js"><span class="hljs-keyword">let</span> sortIndex = tags.findIndex(<span class="hljs-function"><span class="hljs-params">t</span> =&gt;</span> /^sort:(recent|likes|oldest)$/.test(t)),
+</code></pre>
+<p>And there's the problem, we check for <code>sort</code>, not <code>order</code>. This is fixed by updating the command help, but the issue still persists in testing with <code>sort</code>. If we move down to the actual request we see this:</p>
+<pre><code class="hljs-js"><span class="hljs-keyword">async</span> searchPosts(tags, sort = <span class="hljs-string">'recent'</span>, nsfw = <span class="hljs-literal">false</span>) {
+    <span class="hljs-keyword">let</span> resp = <span class="hljs-keyword">await</span> axios.post(<span class="hljs-string">'https://nekos.brussell.me/api/v1/images/search'</span>,
+        { nsfw, <span class="hljs-attr">tags</span>: tags.join(<span class="hljs-string">','</span>), <span class="hljs-attr">limit</span>: <span class="hljs-number">20</span> },
+        { <span class="hljs-attr">headers</span>: { <span class="hljs-string">'User-Agent'</span>: <span class="hljs-string">"don't copy my code"</span>} });
+</code></pre>
+<p>I must have been really tired, because although a sort parameter is passed, it's never actually used. Adding it to the axios parameters fixes the issue. This shows why you shouldn't rush testing, as it could have been easily noticed before release.</p>
+<h2 id=about-command-errors>About command errors</h2>
+<p>Another example of insufficient testing, the about command included a line of code that was not updated after a breaking change in <code>mirai-bot-core</code>. <code>mirai.commandPlugins</code> was changed from an array to an object. The fix was fairly simple, so I'll just show it below.</p>
+<pre><code class="hljs-diff"><span class="hljs-deletion">- In this version I have **${this.parent.bot.commandPlugins.reduce((t, p) =&gt; t ...</span>
+<span class="hljs-addition">+ In this version I have **${Object.values(this.parent.bot.commandPlugins).redu...</span>
+</code></pre>
+<h2 id=anime-list-sync-fails>Anime list sync fails</h2>
+<p>There was a problem in the function that gets a list of users and their MAL username to update. Here's the code:</p>
+<pre><code class="hljs-js"><span class="hljs-keyword">const</span> supporters = (<span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.parent.database.models.keys.distinct(<span class="hljs-string">'ownerId'</span>, { <span class="hljs-attr">ownerId</span>: { <span class="hljs-attr">$exists</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">$ne</span>: <span class="hljs-literal">null</span> } }).lean()).map(<span class="hljs-function"><span class="hljs-params">k</span> =&gt;</span> k.ownerId);
+
+<span class="hljs-keyword">if</span> (supporters.length === <span class="hljs-number">0</span>)
+    <span class="hljs-keyword">return</span>;
+
+<span class="hljs-keyword">let</span> users = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.parent.database.models.userSettings.find({
+    <span class="hljs-attr">id</span>: { <span class="hljs-attr">$in</span>: supporters },
+    <span class="hljs-attr">malUsername</span>: { <span class="hljs-attr">$exists</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">$nin</span>: <span class="hljs-literal">null</span> }
+}).lean();
+</code></pre>
+<p>There are two issues here. First, the first line doesn't need a <code>lean()</code> or <code>map()</code>, since distinct will already return an array of ownerIds. This was either leftover from a replaced <code>find()</code> query, or I just assumed that it would return results similar to <code>find()</code>.</p>
+<p>Secondly, a case of copy-pasting code. <code>{ $exists: true, $nin: null }</code> should have <code>$ne</code> (not equal to) instead of <code>$nin</code> (not in array). Here's the fixed code.</p>
+<pre><code class="hljs-js"><span class="hljs-keyword">const</span> supporters = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.parent.database.models.keys.distinct(<span class="hljs-string">'ownerId'</span>, { <span class="hljs-attr">ownerId</span>: { <span class="hljs-attr">$exists</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">$ne</span>: <span class="hljs-literal">null</span> } });
+
+<span class="hljs-keyword">if</span> (supporters.length === <span class="hljs-number">0</span>)
+    <span class="hljs-keyword">return</span>;
+
+<span class="hljs-keyword">let</span> users = <span class="hljs-keyword">await</span> <span class="hljs-keyword">this</span>.parent.database.models.userSettings.find({
+    <span class="hljs-attr">id</span>: { <span class="hljs-attr">$in</span>: supporters },
+    <span class="hljs-attr">malUsername</span>: { <span class="hljs-attr">$exists</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">$ne</span>: <span class="hljs-literal">null</span> }
+}).lean();
+</code></pre>
+<h2 id=reminder-command-tries-to-create-reminder-with-no-time-field>Reminder command tries to create reminder with no time field</h2>
+<p>After looking at the code I figured out this was because a user had failed to enter a valid time after three tries (the maximum). When this happens the askForTime loop exist without having set <code>time</code> to a valid time. Now, there are two places where this loop exists, which I seem to have forgotten when writing the code. In the first occurrence there <em>is</em> a check for <code>tries === 3</code>, but since we used <code>tries++ &lt; 3</code> this wont work. The loop will see that tries is not less than 3, and then set tries to 4. That check is fixed by changing the condition to <code>tries === 4</code> and setting the loop to use <code>++tries &lt; 4</code> for readability. Looking at the other use of the loop I see that I forgot to actually put the check there. This is an example of why having duplicate code is bad.</p>
+<h2 id=twitch-stream-update-requests-sending-faster-than-the-ratelimit-allows>Twitch stream update requests sending faster than the ratelimit allows</h2>
+<p>This update included a re-write of how the Twitch module checks for updated streams. In the past we used a simple loop. No matter what happened in the update function it would always be called again after a set interval. In the new system the update function queues up the next update when it runs. The logic for this is shown below.</p>
+<pre><code class="hljs-text">update(index)
+    <span class="hljs-built_in">..</span>.
+    index + 100 &gt; channels.length?
+        <span class="hljs-literal">yes</span>: <span class="hljs-builtin-name">run</span> update() <span class="hljs-keyword">in</span> (channels / 100 * 1000)ms
+        <span class="hljs-literal">no</span>: <span class="hljs-builtin-name">run</span> update(index + 100) <span class="hljs-keyword">in</span> 1250ms
+    <span class="hljs-built_in">..</span>.
+</code></pre>
+<p>This introduces a problem though. If the update function somehow errors, it is possible for the next update to not be scheduled. To fix this we also schedule the next update when catching an error. You may be seeing the cause now. Say we have an error during the request to the Twitch API. This will throw an error and we'll enter the <code>catch</code> block. The catch block then sets the next update to run and logs the error. The problem is that the next update was already scheduled when the update started. Now we have created an entirely separate update loop that will continue to run and create new update loops. Visualized it looks like this:</p>
+<p><img src="../../../../i.imgur.com/ep6F4IS.png" alt="Graph of Twitch module events" title="Queued requests building up"></p>
+<p>Requests get queued faster than the ratelimiter can send them, leading to thousands of unfulfilled promises in memory. The solution I came up with was to assign all timers to a variable, and then run <code>clearTimeout(that variable)</code> before each new timer was created.</p>
+<h1 id=lessons-to-learn-from-this>Lessons to learn from this</h1>
+<ol>
+<li>Don't assume that your code will work, test it.</li>
+<li>Test patches to make sure your fix actually worked. I pushed patches during this where the issue was not yet resolved.</li>
+<li>When you write complicated code, go over it line by line and explain it to yourself in simple terms. This can help you catch bugs that you missed when only looking at the bigger picture.</li>
+<li>Test <strong>all</strong> features extensively and test under conditions that could produce errors.</li>
+<li>Don't duplicate code, put it in a function where it can be called from anywhere it's needed. This makes it easier to make modifications to it.</li>
+</ol>
+
+
+		<div class="ad">
+			<script async src="../../../../pagead2.googlesyndication.com/pagead/js/f.txt"></script>
+			<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1129127991310590" data-ad-slot="2994016622" data-ad-format="auto"></ins>
+			<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+		</div>
+	</body>
+
+<!-- Mirrored from brussell.me/blog/2017/12/fixing-bugs-and-errors-in.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 28 Nov 2018 19:15:17 GMT -->
+</html>
